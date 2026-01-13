@@ -1,0 +1,594 @@
+"""Exposes a URL that specifies the behavior of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behavior of this scalar."""
+  url: String!
+) on SCALAR
+
+directive @context on FIELD
+
+type AIAdvisor {
+  query: String!
+  blocks: [AiAdvisorBlockItem!]!
+}
+
+union AiAdvisorBlockItem = AiAdvisorTitleBlock | AiAdvisorParagraphBlock | AiRecommendedProductsBlock | AiAdvisorBulletlistBlock
+
+type AiAdvisorBulletlistBlock {
+  items: [String!]!
+}
+
+type AiAdvisorParagraphBlock {
+  text: String!
+}
+
+type AiAdvisorTitleBlock {
+  text: String!
+}
+
+type AiRecommendedProductsBlock {
+  productIds: [String!]!
+  product: [Product!]!
+}
+
+type AvailableFilters {
+  priceIds: [PriceFilterOption!]
+  priceRanges: [PriceRangeFilterOption!]
+  attributes: [Filter!]!
+  onlyInStock: [InStockFilterOption!]
+  reviewRating: [FilterOption!]!
+  priceDrop: [PriceDropFilterOption!]
+  blackFriday: [BlackFridayFilterOption!]
+  brand: [BrandsFilter!]!
+}
+
+type BlackFridayFilterOption {
+  id: String!
+  count: Int
+  active: Boolean
+}
+
+type BrandsFilter {
+  id: Int!
+  name: String!
+  count: Int!
+  order: Int!
+  active: Boolean
+  min: Float
+  max: Float
+}
+
+enum CategoryPreferredLayoutEnum {
+  rows
+  grid
+}
+
+enum CategoryTypeEnum {
+  category
+  attribute_category
+  redirect_category
+}
+
+type CorrectedQuery {
+  categorySlug: String
+  filterString: String
+  orderBy: OrderBy
+  correctorResult: String
+}
+
+enum CountryCode {
+  cz
+  sk
+  bg
+}
+
+enum DisplayTypeEnum {
+  THUMBNAILS
+  BUTTONS
+}
+
+enum EnergyLabelValuesExtended {
+  Appp
+  App
+  Ap
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+}
+
+type EnergyParam {
+  paramName: String!
+  valueName: EnergyLabelValuesExtended!
+  order: Int!
+  color: EnergyParamColor!
+  firstLetter: String!
+  lastLetter: String!
+}
+
+enum EnergyParamColor {
+  COLORED
+  BLUE
+}
+
+type EnergyRangeType {
+  color: FilterRangeColorType!
+  firstLetter: String!
+  lastLetter: String!
+}
+
+type Filter {
+  id: String!
+  name: String!
+  order: Int!
+  unit: String
+  valueType: FilterAttributeValueType!
+  values: [FilterOption!]!
+  description: String
+  showOnlyUpperLimit: Boolean!
+  showOnlyLowerLimit: Boolean!
+  status: FilterStatus!
+  energyRangeType: EnergyRangeType
+}
+
+enum FilterAttributeValueType {
+  string
+  number
+  numerical01
+  numerical02
+  numerical03
+  numerical04
+  numerical05
+  bool
+  palette
+}
+
+enum FilterKeys {
+  price_ids
+  price_min
+  price_max
+  only_in_stock
+  review_rating
+  product_status
+  brand
+  price_drop
+  black_friday
+}
+
+type FilterOption {
+  id: Float
+  count: Int!
+  order: Int!
+  name: String
+  code: String
+  min: Float
+  max: Float
+  active: Boolean
+}
+
+enum FilterRangeColorType {
+  BLUE
+  COLORED
+}
+
+input FilterRangeInput {
+  min: Float = null
+  max: Float = null
+}
+
+input FiltersInput {
+  idsFilters: [IdsFilterInput!]
+  typeFilters: [TypeFilterInput!]
+  rangeFilters: [RangeFilterInput!]
+}
+
+type FilterStatus {
+  filter: Boolean!
+  offerValues: Boolean!
+  search: Boolean!
+  distributionParam: Boolean!
+  mustConfirmValues: Boolean!
+  useItemGroupId: Boolean!
+  specification: Boolean!
+  filterDetail: Boolean!
+  subAttribute: Boolean!
+  noIntervals: Boolean!
+}
+
+input IdsFilterInput {
+  keyId: String!
+  ids: [String!]!
+}
+
+type Image {
+  url: String!
+  dimensions: String!
+  orientation: String
+}
+
+type InStockFilterOption {
+  id: Int!
+  count: Int!
+  active: Boolean
+}
+
+type LineParamForPreview {
+  id: String
+  name: String
+  displayType: DisplayTypeEnum
+  unit: String
+  order: Int
+  values: [LineParamsValue!]
+}
+
+type LineParamsValue {
+  id: String!
+  value: String!
+  order: Int
+  productIds: [String!]
+  imageUrl: String
+}
+
+type Offer {
+  id: String!
+  uuid: String
+  name: String!
+  description: String!
+  price: Float!
+  shopId: String!
+  shopUuid: String
+  shopName: String!
+  shopSlug: String
+  shopRecommendationsPct: Int
+  shopReviewCount: Int!
+  shopOzCertificate: ShopOZCertificate
+  type: String!
+  imageUrl: String
+  imageUuid: String
+  images: [Image!]
+  producerName: String
+  producerId: String
+  producerUuid: String
+  preferredExit: PreferredExit!
+}
+
+enum OrderBy {
+  not_specified
+  relevance
+  id_asc
+  id_desc
+  price_asc
+  price_desc
+  rank_asc
+  rank_desc
+  rank_only_desc
+  original_order
+  review_count_desc
+}
+
+type PreferredExit {
+  offerId: String!
+  offerUuid: String
+  shopName: String!
+  shopSlug: String
+  url: String!
+}
+
+type PriceDrop {
+  shopCount: Int!
+  percentage: Float!
+  originalPrice: Float!
+}
+
+type PriceDropFilterOption {
+  id: String!
+  count: Int
+  min: Int!
+  max: Int!
+  active: Boolean
+}
+
+type PriceFilterOption {
+  id: Int!
+  min: Float!
+  max: Float!
+  count: Int!
+  order: Int!
+  active: Boolean
+}
+
+type PriceRangeFilterOption {
+  id: Int!
+  min: Float!
+  max: Float!
+  count: Int!
+  order: Int!
+  active: Boolean
+}
+
+type Producer {
+  id: String!
+  uuid: String
+  slug: String!
+  name: String!
+  imageUrl: String
+  exactMatch: Boolean!
+  type: String!
+  images: [Image!]
+}
+
+type Product {
+  id: String!
+  uuid: String
+  type: String!
+  name: String!
+  slug: String!
+  minPrice: Float
+  maxPrice: Float
+  categorySlug: String
+  categoryName: String
+  categoryId: String!
+  categoryUuid: String
+  imageUrl: String
+  imageUuid: String
+  topBadge: Int
+  energyParams: [EnergyParam!]
+  images: [Image!]
+  reviewRating: Int
+  reviewCount: Int
+  offerCount: Int!
+  preferredExit: PreferredExit
+  restricted: Boolean!
+  paramsForPreview: [ProductParamForPreview!]
+  shopCount: Int
+  shortDescription: String
+  eanCodes: [String!]
+  producerName: String
+  producerId: String
+  producerUuid: String
+  priceDrop: PriceDrop
+}
+
+type ProductAd {
+  id: String!
+  uuid: String
+  type: String!
+  name: String!
+  slug: String!
+  minPrice: Float
+  maxPrice: Float
+  categorySlug: String
+  categoryName: String
+  categoryId: String
+  categoryUuid: String
+  imageUrl: String
+  topBadge: Int
+  energyParams: [EnergyParam!]
+  images: [Image!]
+  reviewRating: Int
+  reviewCount: Int
+  offerCount: Int
+  preferredExit: PreferredExit
+  restricted: Boolean
+  paramsForPreview: [ProductParamForPreview!]
+  shopCount: Int
+  shortDescription: String
+  eanCodes: [String!]
+  producerName: String
+  producerId: String
+  producerUuid: String
+  priceDrop: PriceDrop
+  productAdInfo: ProductAdInfo
+}
+
+type ProductAdInfo {
+  impressionUrl: String
+  clickUrl: String
+  promoType: String!
+  promoTypeText: String!
+  allowListingDuplicity: Boolean!
+  order: Int!
+  adSourceType: String!
+  gowitAdId: String
+  gowitSessionId: String
+}
+
+type ProductLine {
+  uuid: String!
+  type: String!
+  name: String!
+  slug: String!
+  minPrice: Float
+  maxPrice: Float
+  reviewRating: Int
+  reviewCount: Int
+  categorySlug: String
+  categoryName: String
+  categoryUuid: String
+  topBadge: Int
+  energyParams: [EnergyParam!]
+  images: [Image!]
+  offerCount: Int
+  preferredExit: PreferredExit
+  restricted: Boolean!
+  lineParams: [LineParamForPreview!]
+  shopCount: Int
+  shortDescription: String
+  eanCodes: [String!]
+  producerName: String
+  producerId: String
+  producerUuid: String
+  products: [Product!]
+}
+
+type ProductOrLine {
+  uuid: String!
+  type: ProductOrLineTypeEnum!
+  name: String!
+  minPrice: Float
+  maxPrice: Float
+  reviewRating: Int
+  reviewCount: Int
+  slug: String
+  id: String
+  categorySlug: String
+  categoryName: String
+  categoryUuid: String
+  categoryId: String
+  topBadge: Int
+  energyParams: [EnergyParam!]
+  images: [Image!]
+  offerCount: Int
+  preferredExit: PreferredExit
+  restricted: Boolean!
+  paramsForPreview: [ProductParamForPreview!]
+  lineParams: [LineParamForPreview!]
+  shopCount: Int
+  shortDescription: String
+  eanCodes: [String!]
+  producerName: String
+  producerId: String
+  producerUuid: String
+  priceDrop: PriceDrop
+  products: [Product!]
+}
+
+enum ProductOrLineTypeEnum {
+  product
+  product_line
+}
+
+type ProductParamForPreview {
+  description: String
+  text: String!
+}
+
+type QCEntity {
+  name: String!
+  total: Total!
+}
+
+type Query {
+  serp(body: SerpRequestBody!, country: CountryCode!): SerpResponse!
+}
+
+type QueryContext {
+  entities: [QCEntity!]!
+}
+
+input RangeFilterInput {
+  keyId: Int!
+  rangeValue: FilterRangeInput!
+}
+
+enum RedirectObjectType {
+  category
+  serp
+  shop
+  brand
+  product
+  url
+  corrector
+}
+
+type RedirectToObject {
+  type: RedirectObjectType!
+  originalQuery: String!
+  orderBy: OrderBy!
+  id: Int
+  uuid: String
+  slug: String
+  categorySlug: String
+  name: String
+  url: String
+  query: String
+  filterString: String
+}
+
+input SerpRequestBody {
+  query: String = null
+  productIds: [String!] = null
+  productUuids: [String!] = null
+  filterString: String = null
+  filters: FiltersInput = null
+  orderBy: OrderBy! = not_specified
+  offset: Int! = 0
+  limit: Int! = 24
+  page: Int = null
+  pageSize: Int = null
+  ignoreCache: Boolean! = false
+}
+
+type SerpResponse {
+  queryContext: QueryContext!
+  aiAdvisor: AIAdvisor
+  aiQuestions: [String!]!
+  deciderResult: String!
+  product: [Product!]!
+  availableFilters: AvailableFilters!
+  productAds: [ProductAd!]!
+  subcategories: [Subcategory!]!
+  correctedQuery: CorrectedQuery!
+  offers: [Offer!]!
+  shops: [Shop!]!
+  producers: [Producer!]!
+  productAdvisors: [Product!]!
+  queryRedirect: [RedirectToObject!]!
+  productLine: [ProductLine!]!
+  productsAndLines: [ProductOrLine!]!
+}
+
+type Shop {
+  id: String!
+  uuid: String
+  name: String!
+  slug: String!
+  url: String
+  imageUrl: String
+  images: [Image!]
+  recommendationsPct: Int
+  reviewCount: Int!
+  ozCertificate: ShopOZCertificate
+  type: String!
+}
+
+enum ShopOZCertificate {
+  blue
+  gold
+}
+
+type Subcategory {
+  id: String!
+  uuid: String
+  slug: String!
+  name: String!
+  parentId: String
+  parentUuid: String
+  isLast: Boolean!
+  productCount: Int
+  type: CategoryTypeEnum!
+  filterString: String
+  imageUrl: String
+  imageUuid: String
+  images: [Image!]
+  rank: Int
+  restricted: Boolean!
+  exactMatch: Boolean
+  contentPreferredLayout: CategoryPreferredLayoutEnum
+}
+
+type Total {
+  value: Int!
+  relation: String!
+}
+
+input TypeFilterInput {
+  filterKey: FilterKeys!
+  boolValue: Boolean = null
+  stringValue: String = null
+  numberValue: Float = null
+  idValues: [Int!] = null
+}
+

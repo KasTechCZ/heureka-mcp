@@ -1,0 +1,7 @@
+services:
+  connect-mcp:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - .:/app
